@@ -16,7 +16,7 @@ class ContactDao {
 
   Future<int> save(Contact contact) async {
     final Database db = await getDatabase();
-    final Map<String, dynamic> contactMap = _toMap(contact);
+    Map<String, dynamic> contactMap = _toMap(contact);
 
     return db.insert(_tableName, contactMap);
   }
