@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newbytebank/database/dao/contact_dao.dart';
 import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/screens/contact_form.dart';
+import 'package:newbytebank/screens/transaction_form.dart';
 
 class ContactsList extends StatelessWidget {
   final ContactDao _dao = ContactDao();
@@ -38,7 +39,15 @@ class ContactsList extends StatelessWidget {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final Contact contact = contacts[index];
-                  return _ContactItem(contact);
+                  return _ContactItem(
+                    contact,
+                    onClick: () {
+                      Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => TransactionForm(contact)
+                          )
+                      );
+                  },);
                 },
                 itemCount: contacts.length,
               );
@@ -63,13 +72,15 @@ class ContactsList extends StatelessWidget {
 
 class _ContactItem extends StatelessWidget {
   final Contact contact;
+  final Function onClick;
 
-  _ContactItem(this.contact);
+  _ContactItem(this.contact, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: () => onClick(),
         title: Text(
           contact.name,
           style: TextStyle(
