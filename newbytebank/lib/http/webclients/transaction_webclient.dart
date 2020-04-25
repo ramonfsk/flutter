@@ -1,8 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:http/http.dart';
-import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/models/Transaction.dart';
 
 import '../webclient.dart';
@@ -19,6 +16,8 @@ class TransactionWebClient {
 
   Future<Transaction> save(Transaction transaction, String password) async {
     final String transactionJson = jsonEncode(transaction.toJson());
+
+    await Future.delayed(Duration(seconds: 2));
 
     final Response res = await client.post(
         baseUrl,
