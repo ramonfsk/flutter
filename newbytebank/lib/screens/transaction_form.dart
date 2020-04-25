@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newbytebank/component/transaction_auth_dialog.dart';
 import 'package:newbytebank/http/webclients/transaction_webclient.dart';
 import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/models/Transaction.dart';
@@ -61,10 +62,12 @@ class _TransactionFormState extends State<TransactionForm> {
                     child: Text('Transfer'), onPressed: () {
                       final double value = double.tryParse(_valueController.text);
                       final transactionCreated = Transaction(value, widget.contact);
-                      _webClient.save(transactionCreated).then((transaction) {
-                        if(transaction != null)
-                          Navigator.pop(context);
+                      showDialog(context: context, builder: (contextDialog) {
+                        return TransactionAuthDialog(onConfirm: (String password) {
+                          _save(transactionCreated, password, context);
+                        },);
                       });
+
                   },
                   ),
                 ),
@@ -74,5 +77,13 @@ class _TransactionFormState extends State<TransactionForm> {
         ),
       ),
     );
+  }
+
+  void _save(Transaction transactionCreated, String password, BuildContext context) async {
+//    await Future.delayed(Duration(seconds: 1));
+    _webClient.save(transactionCreated, password).then((transaction) {
+      if(transaction != null)
+        Navigator.pop(context);
+    });
   }
 }

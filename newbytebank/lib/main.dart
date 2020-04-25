@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newbytebank/component/transaction_auth_dialog.dart';
 import 'package:newbytebank/http/webclient.dart';
 import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/models/Transaction.dart';
