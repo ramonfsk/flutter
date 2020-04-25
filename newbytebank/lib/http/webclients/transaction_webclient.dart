@@ -32,15 +32,19 @@ class TransactionWebClient {
     if(res.statusCode == 200)
       return Transaction.fromJson(jsonDecode(res.body));
 
-    throw HttpException(_statusCodeResponse[res.statusCode]);
+    throw HttpException(_getMessage(res.statusCode));
   }
 
-  void _throwHttpError(int statusCode) =>
-      throw Exception(_statusCodeResponse[statusCode]);
+  String _getMessage(int statusCode) {
+    if(_statusCodeResponse.containsKey(statusCode))
+      return _statusCodeResponse[statusCode];
+    return 'Unknown error';
+  }
 
   static final Map<int, String> _statusCodeResponse = {
     400 : 'there was an error submitting transaction',
-    401 : 'authenticate failed'
+    401 : 'authenticate failed',
+    409 : 'transaction always exists'
   };
 }
 

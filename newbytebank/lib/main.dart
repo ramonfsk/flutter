@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:newbytebank/component/transaction_auth_dialog.dart';
-import 'package:newbytebank/http/webclient.dart';
-import 'package:newbytebank/models/Contact.dart';
-import 'package:newbytebank/models/Transaction.dart';
 import 'package:newbytebank/screens/dashboard.dart';
+import 'package:uuid/uuid.dart';
 
 void main() {
   runApp(BytebankApp());
-  //save(Transaction(200.0, Contact(0, 'Gui', 2000))).then((transaction) => print(transaction));
-  //findAll().then((transactions) => print('new transactions: ${transactions}'));
 }
     
 class BytebankApp extends StatelessWidget {

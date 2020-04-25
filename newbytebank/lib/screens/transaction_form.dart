@@ -6,6 +6,7 @@ import 'package:newbytebank/component/transaction_auth_dialog.dart';
 import 'package:newbytebank/http/webclients/transaction_webclient.dart';
 import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/models/Transaction.dart';
+import 'package:uuid/uuid.dart';
 
 class TransactionForm extends StatefulWidget {
   final Contact contact;
@@ -17,11 +18,13 @@ class TransactionForm extends StatefulWidget {
 }
 
 class _TransactionFormState extends State<TransactionForm> {
+  final String transactionId = Uuid().v4();
   final TextEditingController _valueController = TextEditingController();
   final TransactionWebClient _webClient = TransactionWebClient();
 
   @override
   Widget build(BuildContext context) {
+    print('transaction form id $transactionId');
     return Scaffold(
       appBar: AppBar(
         title: Text('New transaction'),
@@ -64,7 +67,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   child: RaisedButton(
                     child: Text('Transfer'), onPressed: () {
                       final double value = double.tryParse(_valueController.text);
-                      final transactionCreated = Transaction(value, widget.contact);
+                      final transactionCreated = Transaction(transactionId, value, widget.contact);
                       showDialog(context: context, builder: (contextDialog) {
                         return TransactionAuthDialog(onConfirm: (String password) {
                           _save(transactionCreated, password, context);
