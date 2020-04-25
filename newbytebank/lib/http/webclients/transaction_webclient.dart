@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:newbytebank/models/Contact.dart';
@@ -8,7 +9,7 @@ import '../webclient.dart';
 
 class TransactionWebClient {
   Future<List<Transaction>> findAll() async {
-    final Response res = await client.get(baseUrl).timeout(Duration(seconds: 5));
+    final Response res = await client.get(baseUrl);
     final List<dynamic> decodedJson = jsonDecode(res.body);
     return decodedJson
         .map((dynamic json) => Transaction.fromJson(json))
@@ -30,7 +31,8 @@ class TransactionWebClient {
 
     if(res.statusCode == 200)
       return Transaction.fromJson(jsonDecode(res.body));
-    _throwHttpError(res.statusCode);
+
+    throw HttpException(_statusCodeResponse[res.statusCode]);
   }
 
   void _throwHttpError(int statusCode) =>
@@ -38,6 +40,12 @@ class TransactionWebClient {
 
   static final Map<int, String> _statusCodeResponse = {
     400 : 'there was an error submitting transaction',
-    401: 'authenticate failed'
+    401 : 'authenticate failed'
   };
+}
+
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
 }
