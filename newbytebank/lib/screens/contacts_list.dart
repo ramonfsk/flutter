@@ -3,19 +3,24 @@ import 'package:newbytebank/database/dao/contact_dao.dart';
 import 'package:newbytebank/models/Contact.dart';
 import 'package:newbytebank/screens/contact_form.dart';
 import 'package:newbytebank/screens/transaction_form.dart';
+import 'package:newbytebank/widgets/app_dependencies.dart';
 
-class ContactsList extends StatelessWidget {
-  final ContactDao _dao = ContactDao();
+class ContactsList extends StatefulWidget {
+  @override
+  _ContactsListState createState() => _ContactsListState();
+}
 
+class _ContactsListState extends State<ContactsList> {
   @override
   Widget build(BuildContext context) {
+    final dependencies = AppDependencies.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Transfer'),
       ),
       body: FutureBuilder<List<Contact>>(
         initialData: List(),
-        future: _dao.findAll(),
+        future: dependencies.contactDao.findAll(),
         builder: (context, snapshot) {
           switch(snapshot.connectionState) {
             case ConnectionState.none:
@@ -39,7 +44,7 @@ class ContactsList extends StatelessWidget {
               return ListView.builder(
                 itemBuilder: (context, index) {
                   final Contact contact = contacts[index];
-                  return _ContactItem(
+                  return ContactItem(
                     contact,
                     onClick: () {
                       Navigator.of(context).push(
@@ -70,11 +75,11 @@ class ContactsList extends StatelessWidget {
   }
 }
 
-class _ContactItem extends StatelessWidget {
+class ContactItem extends StatelessWidget {
   final Contact contact;
   final Function onClick;
 
-  _ContactItem(this.contact, {@required this.onClick});
+  ContactItem(this.contact, {@required this.onClick});
 
   @override
   Widget build(BuildContext context) {
